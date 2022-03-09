@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { Component } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -40,37 +40,37 @@ const getListStyle = isDraggingOver => ({
   width: 250
 });
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: getItems(10)
-    };
-    this.onDragEnd = this.onDragEnd.bind(this);
-  }
+const App = () => {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     items: getItems(10)
+  //   };
+  //   this.onDragEnd = this.onDragEnd.bind(this);
+  // }
 
-  onDragEnd(result) {
+  const [item, setItem] = useState(getItems(10))
+
+  const onDragEnd = (result) => {
+    console.log(result)
     // dropped outside the list
     if (!result.destination) {
       return;
     }
 
     const items = reorder(
-      this.state.items,
+      item,
       result.source.index,
       result.destination.index
     );
 
-    this.setState({
-      items
-    });
+    setItem(items);
   }
 
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity
-  render() {
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
             <div
@@ -102,6 +102,6 @@ class App extends Component {
       </DragDropContext>
     );
   }
-}
+
 
 export default App;
